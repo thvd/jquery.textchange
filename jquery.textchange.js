@@ -37,7 +37,7 @@
 		},
 		
 		triggerIfChanged: function (element) {
-			var current = $this.hasContentEditable() ? element.html() : element.val();
+			var current = element.hasContentEditable() ? element.html() : element.val();
 			if (current !== element.data('lastValue')) {
 				element.trigger('textchange',  [element.data('lastValue')]);
 				element.data('lastValue', current);
