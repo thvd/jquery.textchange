@@ -8,11 +8,15 @@
  */
 (function ($) {
 	
+	$.fn.hasContentEditable = function() {
+		return this[0].contentEditable === 'true';
+	};
+	
 	$.event.special.textchange = {
 		
 		setup: function (data, namespaces) {
 			var $this = $(this);
-			$this.data('lastValue', this.contentEditable === 'true' ? $this.html() : $this.val())
+			$this.data('lastValue', $this.hasContentEditable() ? $this.html() : $this.val())
 				.on('keyup.textchange', $.event.special.textchange.handler)
 				.on('cut.textchange paste.textchange input.textchange', $.event.special.textchange.delayedHandler);
 		},
@@ -26,14 +30,14 @@
 		},
 		
 		delayedHandler: function (event) {
-			var element = $(this);
+			var $this = $(this);
 			setTimeout(function () {
-				$.event.special.textchange.triggerIfChanged(element);
+				$.event.special.textchange.triggerIfChanged($this);
 			}, 25);
 		},
 		
 		triggerIfChanged: function (element) {
-			var current = element[0].contentEditable === 'true' ? element.html() : element.val();
+			var current = $this.hasContentEditable() ? element.html() : element.val();
 			if (current !== element.data('lastValue')) {
 				element.trigger('textchange',  [element.data('lastValue')]);
 				element.data('lastValue', current);
