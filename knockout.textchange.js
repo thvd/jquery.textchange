@@ -1,9 +1,9 @@
 ko.bindingHandlers['textchange'] = {
-	'update': function(element, valueAccessor) {
+	'init': function(element, valueAccessor, viewModel) {
 		var $element = $(element),
 			value = ko.utils.unwrapObservable(valueAccessor());
 
-		$element.off('textchange').on('textchange', value);
+		$element.on('textchange', value.call(viewModel, element));
 	}
 };
 
